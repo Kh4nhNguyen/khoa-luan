@@ -1,0 +1,27 @@
+<div id="slide" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <%for(x in slides){%>
+      <li data-target="#slide" data-slide-to="<%=x%>" class="<%if(x == 0 ){%> return active<%}%>"></li>
+      <%}%>
+  </ul>
+
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+    <%for(x in slides){%>
+      <div class="carousel-item <%if(x == 0 ){%> return active<%}%>">
+        <img src="/static/images/<%=slides[x].thumbnail%>" alt="#">
+      </div>
+      <%}%>
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#slide" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#slide" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+
+</div>

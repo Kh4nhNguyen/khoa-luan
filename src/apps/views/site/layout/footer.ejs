@@ -1,0 +1,74 @@
+<!-- Messenger Plugin chat Code -->
+<div id="fb-root"></div>
+
+<!-- Your Plugin chat code -->
+<div id="fb-customer-chat" class="fb-customerchat">
+</div>
+
+<script>
+    var chatbox = document.getElementById('fb-customer-chat');
+    chatbox.setAttribute("page_id", "100754165972438");
+    chatbox.setAttribute("attribution", "biz_inbox");
+</script>
+
+<!-- Your SDK code -->
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            xfbml: true,
+            version: 'v13.0'
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div id="footer-top">
+    <div class="container">
+        <div class="row">
+            <div id="logo-2" class="col-lg-4 col-md-6 col-sm-12">
+                <p>
+                    Cửa hàng nỗ lực hết mình để phục vụ khách hàng một cách tốt nhất kể cả về chất lượng
+                    linh kiện lẫn giá thành dịch vụ. Khi khách hàng mang điện thoại đến trung tâm để sửa
+                    chữa. Khách hàng vui lòng <b>KÝ TÊN LÊN TOÀN BỘ CÁC LINH KIỆN</b> vì đó là cách làm minh bạch giữa
+                    hai bên.
+                    Quý khách ký tên không nên qua loa vui lòng ký đúng chữ ký của mình nhằm <b>BẢO VỆ TÀI SẢN CỦA QUÝ
+                        KHÁCH</b>.
+                </p>
+                <p>
+                    “Vui lòng khách đến vừa lòng khách đi” Khi đến khách hàng sẽ cảm thấy hài lòng
+                    với đội ngũ nhân viên và kỹ thuật viên tại trung tâm. Cảm ơn quý khách đã quan tâm.
+                </p>
+            </div>
+            <div id="service" class="col-lg-4 col-md-6 col-sm-12">
+                <h3>Dịch vụ</h3>
+                <p>Bảo hành rơi vỡ, ngấm nước Care Diamond</p>
+                <p>Bảo hành Care X60 rơi vỡ ngấm nước vẫn Đổi mới</p>
+            </div>
+            <div id="hotline" class="col-lg-4 col-md-6 col-sm-12">
+                <h3>Thông tin liên hệ</h3>
+                <p>Địa chỉ: Ngõ 14 - Mễ Trì Hạ - Nam Từ Liêm - Hà Nội</p>
+                <p>Giờ làm việc: 8:30 - 18:30 - Không nghỉ trưa</p>
+                <p>Ngày làm việc: Thứ 2 - Thứ 7</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--	Footer	-->
+<div id="footer-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <p>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
