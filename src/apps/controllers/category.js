@@ -29,6 +29,7 @@ const indexC = async (req, res) => {
             skip: skip,
         });
 }
+
 const createC = (req, res) => {
     res.render("admin/category/add_category")
 }
