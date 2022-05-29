@@ -10,14 +10,13 @@ const postLogin = async (req, res) => {
     let error;//biến thay đổi nên khai báo bằng let
 
     const users = await UserModel.find({ email: mail, password: pass });
-    // console.log(users);
-    //Ở phần login nếu nhâp sai trả về [] rỗng còn đúng sẽ trả về mảng có 1 đối tượng
 
     if (mail == "" || pass == "") {
         error = "Thông tin không được để trống!!!"
     } else if (users.length > 0) {
         req.session.mail = mail;//Khởi tạo session
         req.session.pass = pass;
+
         return res.redirect("/admin");
     } else {
         error = "Tài khoản không hợp lệ"

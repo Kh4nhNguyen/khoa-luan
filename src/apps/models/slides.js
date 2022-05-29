@@ -14,6 +14,6 @@ const slidesSchema = mongoose.Schema({
     //tham số thứ 2 tạo schema tự động tạo 2 trường createdAt và updateAt
 })
 
-const SiderBarModel = mongoose.model("Slides", slidesSchema, "slides");
+const SlidesBarModel = mongoose.model("Slides", slidesSchema, "slides");
 
-module.exports = SiderBarModel;
+module.exports = SlidesBarModel;

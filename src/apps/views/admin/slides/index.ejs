@@ -51,7 +51,8 @@
                                                 <td style="align-items: center"><img width="50%" height="100%"
                                                         src="/static/images/<%=slides[x].thumbnail%>" /></td>                                               
                                                 <td class="form-group">
-                                                    <a href="/admin/slides/delete/<%=slides[x]._id%>" class="btn btn-danger"><i
+                                                    <a href="/admin/slides/delete/<%=slides[x]._id%>" class="btn btn-danger"
+                                                        onclick="return confirm('Bạn có xác nhận xóa không?');"><i
                                                             class="glyphicon glyphicon-remove"></i></a>
                                                 </td>
                                             </tr>

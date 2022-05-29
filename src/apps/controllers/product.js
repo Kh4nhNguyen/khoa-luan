@@ -25,7 +25,6 @@ const indexP = async (req, res) => {
         .limit(limit)
         .sort({ "_id": -1 })//sắp xếp kết quả trả về theo trường _id,1 là tăng dần,-1 giảm dần
         ;
-    console.log("products: ", products)
 
     res.render("admin/product/index",
         {
@@ -113,6 +112,7 @@ const updateP = async (req, res) => {
     const id = req.params.id;
     const body = req.body;
     const file = req.file;
+
     const product = ({
         name: body.name,
         price: body.price,
@@ -120,7 +120,7 @@ const updateP = async (req, res) => {
         accessories: body.accessories,
         promotion: body.promotion,
         status: body.status,
-        cat_id: body.cat_id,
+        cat_id: slug(body.cat_id),
         is_stock: body.is_stock,
         featured: body.featured === "on",
         description: body.description,
@@ -156,10 +156,10 @@ const deleteP = async (req, res) => {
     res.redirect("/admin/products");
 }
 module.exports = {
-    indexPKey: indexP,
-    createPKey: createP,
-    storePKey: store,
-    editPKey: editP,
-    deletePKey: deleteP,
-    updatePKey: updateP
+    index: indexP,
+    create: createP,
+    store: store,
+    edit: editP,
+    delete: deleteP,
+    update: updateP
 }

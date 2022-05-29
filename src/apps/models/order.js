@@ -28,6 +28,9 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: null,
     },
+    is_complete: {
+        type: Boolean
+    }
     // createdAt:Date,
     // updateedAt:Date
 }, {
@@ -35,6 +38,6 @@ const orderSchema = mongoose.Schema({
     //tham số thứ 2 tạo schema tự động tạo 2 trường createdAt và updateAt
 })
 
-const OrdertModel = mongoose.model("Orders", orderSchema, "orders");
+const OrderModel = mongoose.model("Orders", orderSchema, "orders");
 
 module.exports = OrderModel;

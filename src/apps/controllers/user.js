@@ -1,6 +1,6 @@
 const UserModel = require('../models/user');
 const paginate = require("../../common/paginate");
-
+const slug = require("slug");
 
 const indexU = async (req, res) => {
 
@@ -27,20 +27,51 @@ const indexU = async (req, res) => {
         });
 }
 const createU = (req, res) => {
-
-    res.render("admin/user/add_user")
+    res.render("admin/user/add_user", {
+        data: {}
+    })
 }
-const editU = (req, res) => {
 
-    res.render("admin/user/edit_user")
+const handleCreate = async (req, res) => {
+    const body = req.body
+    let error;
+
+    const user = ({
+        full_name: body.user_full,
+        email: body.user_mail,
+        password: body.user_pass,
+    })
+
+    const users = await UserModel.find({email:user.email})
+    if(users.length>0){
+        error = "Email đăng ký đã tồn tại"
+    } else if(body.user_pass !== body.user_re_pass){
+        error = "Mật khẩu không trùng khớp"
+    } else {
+        if(body.user_pass.length <6){
+            error = "Mật khẩu phải dài hơn 6 kí tự"
+        }else{
+            error = "Đăng ký thành công"
+            res.redirect("/admin/users")
+        }        
+    }
+
+    new UserModel(user).save()
+    res.render("admin/user/add_user", {
+        data: {error:error}
+    })
 }
-const deleteU = (req, res) => {
 
-    res.render("Welcome to delete users " + text + " page")
+const deleteU = async (req, res) => {
+    const id = req.params.id
+   
+    await UserModel.deleteOne({_id:id})
+
+    res.redirect("/admin/users");
 }
 module.exports = {
-    indexUKey: indexU,
-    createUKey: createU,
-    editUKey: editU,
-    deleteUKey: deleteU
+    index: indexU,
+    create: createU,
+    delete: deleteU,
+    handleCreate:handleCreate
 }

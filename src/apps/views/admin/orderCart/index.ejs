@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <%-include('../layout/head.ejs',{title:"Quản lý Sản Phẩm"})%>
+    <%-include('../layout/head.ejs',{title:"Quản lý đặt"})%>
 </head>
 
 <body>
@@ -27,9 +27,12 @@
                 </div>
                 <!--/.row-->
                 <div id="toolbar" class="btn-group">
-                    <a href="/admin/products/create" class="btn btn-success">
-                        <i class="glyphicon glyphicon-plus"></i> Thêm sản phẩm
-                    </a>
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Có <b style="color: #cb1c22;">
+                            <%=totalProductComplete%></b> đơn hoàn thành : 
+                            <b style="color: #cb1c22;"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(totalProductsPrice)%>
+                            </b></h1>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
@@ -61,13 +64,13 @@
                                                 <%}else{%>
                                                     <td><span class="label label-danger">Hết hàng</span></td>
                                                 <%}%>
-                                                <td><%=products[x].cat_id.title%></td>
+                                                <td><%=products[x].createdAt.toDateString()%></td>
                                                 <td class="form-group">
-                                                    <a href="/admin/products/edit/<%=products[x]._id%>" class="btn btn-primary"><i
-                                                            class="glyphicon glyphicon-pencil"></i></a>
-                                                    <a href="/admin/products/delete/<%=products[x]._id%>" class="btn btn-danger" 
-                                                        onclick="return confirm('Bạn có xác nhận xóa không?');"><i
-                                                            class="glyphicon glyphicon-remove"></i></a>
+                                                    <%if(!products[x].is_complete){%>
+                                                    <a href="/admin/order/complete/<%=products[x]._id%>" class="btn btn-success" 
+                                                        onclick="return confirm('Bạn có xác nhận hoàn thành không?');"><i
+                                                            class="glyphicon glyphicon-ok"></i></a>
+                                                    <%}%>
                                                 </td>
                                             </tr>
                                             <%}%>

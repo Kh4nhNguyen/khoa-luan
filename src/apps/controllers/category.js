@@ -27,6 +27,7 @@ const indexC = async (req, res) => {
             totalPages: totalPages,
             page: page,
             skip: skip,
+
         });
 }
 
@@ -35,7 +36,7 @@ const createC = (req, res) => {
 }
 
 const storeC = (req, res) => {
-    const body = req.body
+    const body = req.body;
 
     const category = ({
         title: body.cat_name,
@@ -43,7 +44,6 @@ const storeC = (req, res) => {
     })
 
     new CategoryModel(category).save();
-    // console.log(body)
 
     res.redirect("/admin/categories")//chuyển hướng đến router
 }
@@ -55,7 +55,7 @@ const editC = async (req, res) => {
 
     res.render("admin/category/edit_category", {
         category: category,
-    })//chuyển hướng đến views
+    })
 }
 
 const updateC = async (req, res) => {
@@ -81,10 +81,10 @@ const deleteC = async (req, res) => {
     res.redirect("/admin/categories")
 }
 module.exports = {
-    indexCKey: indexC,
-    createCKey: createC,
-    editCKey: editC,
-    deleteCKey: deleteC,
-    storeCKey: storeC,
-    updateCKey: updateC,
+    index: indexC,
+    create: createC,
+    edit: editC,
+    delete: deleteC,
+    store: storeC,
+    update: updateC,
 }

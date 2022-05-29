@@ -100,10 +100,10 @@
                             <div class="comment-item">
                                 <ul>
                                     <li><b><%=comment.full_name%></b></li>
-                                    <li><%=comment.createdAt%></li>
+                                    <li><%=comment.createdAt.toDateString()%></li>
                                     <li>
                                         <p><%=comment.body%></p>
-                                    </li>
+                                    </li>                                   
                                 </ul>
                             </div>
                             <%}%>
@@ -111,18 +111,8 @@
                     </div>
                     <!--	End Comments List	-->
                 </div>
-                <!--	End Product	--> 
-                <div id="pagination">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
-                    </ul> 
-                </div>               
-            </div>
-            
+                <!--	End Product	-->                               
+            </div>            
             <%-include("layout/sidebar.ejs")%>
         </div>
     </div>

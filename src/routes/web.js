@@ -12,6 +12,7 @@ const SiteController = require("../apps/controllers/site");
 const CommentController = require('../apps/controllers/comment');
 const SideBarsController = require('../apps/controllers/sideBar')
 const SlidesController = require('../apps/controllers/slides')
+const OrderController = require('../apps/controllers/order')
 
 
 //require middleware
@@ -88,92 +89,92 @@ router.get("/admin/logout",
 
 router.get("/admin",
     AuthMiddleware.checkAdmin,
-    DashboardController.dashboardKey
+    DashboardController.dashboardKey,
 )
 
 // admin/products
 router.get("/admin/products",
     AuthMiddleware.checkAdmin,
-    ProductController.indexPKey
+    ProductController.index
 )
 
 router.get("/admin/products/create",
     AuthMiddleware.checkAdmin,
-    ProductController.createPKey
+    ProductController.create
 )
 
 router.post("/admin/products/store",
     UploadMiddleware.single("thumbnail"),
     AuthMiddleware.checkAdmin,
-    ProductController.storePKey
+    ProductController.store
 )
 //UploadMiddleware.single("thumbnail"),thumbnail tên của trường upload
 
 router.get("/admin/products/edit/:id",
     AuthMiddleware.checkAdmin,
-    ProductController.editPKey
+    ProductController.edit
 )
 
 router.post("/admin/products/update/:id",
     UploadMiddleware.single("thumbnail"),
     AuthMiddleware.checkAdmin,
-    ProductController.updatePKey
+    ProductController.update
 )
 
 router.get("/admin/products/delete/:id",
     AuthMiddleware.checkAdmin,
-    ProductController.deletePKey
+    ProductController.delete
 )
 
 //admin/categories
 router.get("/admin/categories",
     AuthMiddleware.checkAdmin,
-    CategoryController.indexCKey)
+    CategoryController.index)
 
 router.get("/admin/categories/create",
     AuthMiddleware.checkAdmin,
-    CategoryController.createCKey
+    CategoryController.create
 )
 
 router.post("/admin/categories/store",
     AuthMiddleware.checkAdmin,
-    CategoryController.storeCKey
+    CategoryController.store
 )
 
 router.post("/admin/categories/update/:id",
     AuthMiddleware.checkAdmin,
-    CategoryController.updateCKey
+    CategoryController.update
 )
 
 router.get("/admin/categories/edit/:id",
     AuthMiddleware.checkAdmin,
-    CategoryController.editCKey
+    CategoryController.edit
 )
 
 router.get("/admin/categories/delete/:id",
     AuthMiddleware.checkAdmin,
-    CategoryController.deleteCKey
+    CategoryController.delete
 )
 
 //admin/users
 router.get("/admin/users",
     AuthMiddleware.checkAdmin,
-    UserController.indexUKey
+    UserController.index
 )
 
 router.get("/admin/users/create",
     AuthMiddleware.checkAdmin,
-    UserController.createUKey
+    UserController.create
 )
 
-router.get("/admin/users/edit/:id",
+router.post("/admin/users/store",
     AuthMiddleware.checkAdmin,
-    UserController.editUKey
+    UserController.handleCreate
 )
 
 router.get("/admin/users/delete/:id",
     AuthMiddleware.checkAdmin,
-    UserController.deleteUKey
+    UserController.delete
 )
 
 //amdin/comments
@@ -234,6 +235,17 @@ router.post("/admin/slides/store",
 router.get("/admin/slides/delete/:id",
     AuthMiddleware.checkAdmin,
     SlidesController.del
+)
+
+////admin/orderCart
+router.get("/admin/order",
+    AuthMiddleware.checkAdmin,
+    OrderController.index
+)
+
+router.get("/admin/order/complete/:id",
+    AuthMiddleware.checkAdmin,
+    OrderController.complete
 )
 
 // router.get("/admin/:adminID", (req, res) => {

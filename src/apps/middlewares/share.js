@@ -4,7 +4,6 @@ const SliderModel = require("../models/slides");
 
 
 module.exports = async (req, res, next) => {
-    res.locals.checkExist = false;
     res.locals.sideBars = await SiderBarModel.find();
     res.locals.slides = await SliderModel.find();
     res.locals.categories = await CategoryModel.find();

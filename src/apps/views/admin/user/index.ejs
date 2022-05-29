@@ -68,12 +68,12 @@
                                                                     <%=user[y].role%>
                                                                 </span></td>
                                                             <%}%>
-                                                                <td class="form-group">
-                                                                    <a href="/admin/users/edit/<%=user[y]._id%>"
-                                                                        class="btn btn-primary"><i
-                                                                            class="glyphicon glyphicon-pencil"></i></a>
-                                                                    <a href="/" class="btn btn-danger"><i
+                                                                <td class="form-group">                                                                    
+                                                                    <%if(user[y].role!=='admin'){%>
+                                                                    <a href="/admin/users/delete/<%=user[y]._id%>" class="btn btn-danger"
+                                                                        onclick="return confirm('Bạn có xác nhận xóa không?');"><i
                                                                             class="glyphicon glyphicon-remove"></i></a>
+                                                                            <%}%>
                                                                 </td>
                                                 </tr>
                                                 <%}%>
