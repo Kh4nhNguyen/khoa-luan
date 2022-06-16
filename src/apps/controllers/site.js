@@ -31,8 +31,6 @@ const category = async (req, res) => {
     const id = req.params.id;
     const slug = req.params.slug;
 
-    // console.log(slug);
-    // console.log(id);
     const category = await CategoryModel.findById({
         _id: id
     })
@@ -127,12 +125,13 @@ const addToCart = async (req, res) => {
     const body = req.body;
     let items = req.session.cart;//middlewares/cart
 
+    console.log(body)
     let isUpdate = false;
     //Mua lại sản phẩm cũ
     items.map((item) => {
         if (item.id === body.id) {
             isUpdate = true;
-            item.qty += parseInt(body.id);
+            item.qty += parseInt(body.qty);
             /*cần ép kiểu do khi dùng form thì tất cả
             dữ liệu gửi đi đều là string nên cần ép kiểu */
         }
@@ -173,12 +172,8 @@ const updateCart = (req, res) => {
     const items = req.session.cart;
     const products = req.body.products;
 
-    // console.log(items)
-    // console.log(products)
     items.map((item) => {
         if (products[item.id]) {
-            // console.log(products[item.id]["qty"])
-            // console.log(products[item.id])
             item.qty = parseInt(products[item.id]["qty"]);
         }
     })
@@ -256,6 +251,120 @@ const success = (req, res) => {
     res.render("site/success");
 }
 
+const querryCondision = async (req, res) => {
+    const id = req.params.id
+    const slug = req.params.slug
+    const condision = req.params.condision
+
+    if (condision === 'outstanding') {
+        const category = await CategoryModel.findById({
+            _id: id
+        })
+
+        const title = category.title;
+        const products_1 = await ProductModel.find({
+            cat_id: id, featured: true
+        }).sort({ _id: -1 })
+
+        const totals = products_1.length;//Tong product
+
+        //Phan trang
+        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const limit = 12;
+        const skip = page * limit - limit;
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
+        const totalPage = Math.ceil(total / limit);//làm tròn lên
+        // console.log(page);
+
+        paginate(page, totalPage);
+        const products = await ProductModel.find({
+            cat_id: id, featured: true
+        }).sort({ _id: -1 }).skip(skip).limit(12)
+
+        res.render("site/category", {
+            products: products,
+            title: title,
+            totals: totals,
+            category: category,
+            pages: paginate(page, totalPage),
+            totalPage: totalPage,
+            page: page,
+            condision:condision
+        });
+    }else if(condision === 'cheap'){
+        const category = await CategoryModel.findById({
+            _id: id
+        })
+
+        const title = category.title;
+        const products_1 = await ProductModel.find({
+            cat_id: id,
+        }).sort({ price: 1 })
+
+        const totals = products_1.length;//Tong product
+
+        //Phan trang
+        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const limit = 12;
+        const skip = page * limit - limit;
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
+        const totalPage = Math.ceil(total / limit);//làm tròn lên
+        // console.log(page);
+
+        paginate(page, totalPage);
+        const products = await ProductModel.find({
+            cat_id: id,
+        }).sort({ price: 1 }).skip(skip).limit(12)
+
+        res.render("site/category", {
+            products: products,
+            title: title,
+            totals: totals,
+            category: category,
+            pages: paginate(page, totalPage),
+            totalPage: totalPage,
+            page: page,
+            condision:condision
+        });
+    }else{
+        const category = await CategoryModel.findById({
+            _id: id
+        })
+
+        const title = category.title;
+        const products_1 = await ProductModel.find({
+            cat_id: id,
+        }).sort({ price: -1 })
+
+        const totals = products_1.length;//Tong product
+
+        //Phan trang
+        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const limit = 12;
+        const skip = page * limit - limit;
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
+        const totalPage = Math.ceil(total / limit);//làm tròn lên
+        // console.log(page);
+
+        paginate(page, totalPage);
+        const products = await ProductModel.find({
+            cat_id: id,
+        }).sort({ price: -1 }).skip(skip).limit(12)
+
+        res.render("site/category", {
+            products: products,
+            title: title,
+            totals: totals,
+            category: category,
+            pages: paginate(page, totalPage),
+            totalPage: totalPage,
+            page: page,
+            condision:condision
+        });
+    }
+
+}
+
 module.exports = {
     home: home,
     category: category,
@@ -267,5 +376,6 @@ module.exports = {
     addToCart: addToCart,
     updateCart: updateCart,
     delCart: delCart,
-    order: order
+    order: order,
+    querryCondision: querryCondision
 }

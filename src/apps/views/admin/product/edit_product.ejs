@@ -85,7 +85,7 @@
                                         <label>Danh mục</label>
                                         <select name="cat_id" class="form-control">
                                             <%for(x in categories){%>
-                                                <option <% if(categories[x].id === product.cat_id){%>selected<%}%> value="
+                                                <option <% if(categories[x].id===product.cat_id){%>selected<%}%> value="
                                                         <%=categories[x]._id%>"><%=categories[x].title%>
                                                 </option>
                                                 <%}%>
@@ -112,7 +112,7 @@
                                     <div class="form-group">
                                         <label>Mô tả sản phẩm</label>
                                         <textarea id="description" name="description" required class="form-control"
-                                            rows="3"></textarea>                                        
+                                            rows="6"><%=product.description%></textarea>
                                     </div>
                                     <button type="submit" name="sbm" class="btn btn-primary">Cập nhật</button>
                                     <button type="reset" class="btn btn-default">Làm mới</button>

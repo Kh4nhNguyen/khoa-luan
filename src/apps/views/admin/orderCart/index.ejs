@@ -44,8 +44,7 @@
                                             <th data-field="id" data-sortable="true">ID</th>
                                             <th data-field="name" data-sortable="true">Tên sản phẩm</th>
                                             <th data-field="price" data-sortable="true">Giá</th>
-                                            <th>Ảnh sản phẩm</th>
-                                            <th>Trạng thái</th>
+                                            <th>Ảnh sản phẩm</th>                                            
                                             <th>Danh mục</th>
                                             <th>Hành động</th>
                                         </tr>
@@ -58,12 +57,7 @@
                                                 <td style=""><%=products[x].name%></td>
                                                 <td style=""><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(products[x].price)%></td>
                                                 <td style="text-align: center"><img width="130" height="180"
-                                                        src="/static/images/<%=products[x].thumbnail%>" /></td>
-                                                <%if(products[x].is_stock){%>
-                                                    <td><span class="label label-success">Còn hàng</span></td>
-                                                <%}else{%>
-                                                    <td><span class="label label-danger">Hết hàng</span></td>
-                                                <%}%>
+                                                        src="/static/images/<%=products[x].thumbnail%>" /></td>                                               
                                                 <td><%=products[x].createdAt.toDateString()%></td>
                                                 <td class="form-group">
                                                     <%if(!products[x].is_complete){%>

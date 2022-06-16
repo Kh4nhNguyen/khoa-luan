@@ -272,6 +272,7 @@ router.post("/update-cart", SiteController.updateCart);
 router.get("/del-cart-:id", SiteController.delCart);
 router.post("/order", SiteController.order);
 router.get("/success", SiteController.success);
+router.get("/sort-:slug-:id-:condision", SiteController.querryCondision)
 
 /*phương thức get là có truyền dữ liệu qua url (vd :id query string...) 
     post bảo mật hơn truyền qua HTTP header

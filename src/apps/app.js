@@ -10,7 +10,7 @@ app.set("view engine", config.get("app").view_engine)//gắn đối tượng ejs
 
 app.use("/static", express.static(config.get("app").static_folder));//tạo đường dẫn tĩnh /static thay thế "./../src/public" nằm trong config
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 /* cách lấy dữ liệu trả về từ phương thức post 
 •	urlencoded: phương thức cho lấy dữ liệu từ Form

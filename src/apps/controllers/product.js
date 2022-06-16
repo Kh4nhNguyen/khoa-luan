@@ -9,7 +9,7 @@ const indexP = async (req, res) => {
     //đoẠN Code xử lý phân trang
     const page = parseInt(req.query.page) || 1;//parseInt() ép kiểu về dạng số nguyên
     //Toán tử 3 ngôi page = A||B nếu k có a thì bằng b
-    const limit = 10;
+    const limit = 5;
     skip = page * limit - limit;
 
     //ĐOạn code xử lý thanh phân trang phải viết dưới code phân trang vì cần page để sử dụng
