@@ -7,7 +7,7 @@
 
 <body>
     <%-include('../layout/header.ejs')%>
-        <%-include('../layout/sidebar.ejs')%>
+    <%-include('../layout/sidebar.ejs',{status:"products"})%>
 
             <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
                 <div class="row">
@@ -25,13 +25,74 @@
                         <h1 class="page-header">Danh sách sản phẩm</h1>
                     </div>
                 </div>
+                <div id="search" style="margin-bottom: 16px;">
+                    <form class="form-inline" action="/admin/products/search" method="get">
+                        <input name="key_word" class="form-control mt-3" type="search" placeholder="Nhập sản phẩm cần tìm..."
+                            aria-label="Search">
+                        <button class="btn btn-success mt-3" type="submit">Tìm kiếm</button>
+                    </form>
+                </div>
                 <!--/.row-->
                 <div id="toolbar" class="btn-group">
                     <a href="/admin/products/create" class="btn btn-success">
                         <i class="glyphicon glyphicon-plus"></i> Thêm sản phẩm
-                    </a>
+                    </a>                  
+                </div> 
+
+                <div class="col-md-8" style="margin-bottom: 16px;">   
+                    <form action="/admin/products/sort" method="get">
+                        <div style="display:flex; align-items: flex-end;" class="form-group">
+                            <div class="form-group">
+                                <label class="control-label" for="category">Category</label>
+                                <select style="width: 200px;" class="form-control" id="category" name="category" required>
+                                    <option value="" id="none" selected>None</option>
+                                    <%for(x in categories){%>
+                                        <option value="<%=categories[x]._id%>" id="<%=categories[x]._id%>"><%=categories[x].title%></option>
+                                    <%}%>
+                                </select>                                
+                            </div>                             
+                            <div class="form-group">                    
+                                <label class="control-label" for="feature">Nổi bật</label>
+                                <select style="width: 200px;" class="form-control" id="featured" name="featured">
+                                <option value="false" id="false" selected>None</option>
+                                <option value="true" id="true">Nổi bật</option>                       
+                                </select>
+                            </div>  
+                            <div class="form-group">                    
+                                <label class="control-label" for="price">Giá cả</label>
+                                <select style="width: 200px;" class="form-control" id="price" name="price">
+                                <option value="none" id="none" selected>None</option>
+                                <option value="1" id="cheap">Giá thấp</option>                       
+                                <option value="-1" id="expensive">Giá cao</option>                       
+                                </select>
+                            </div>  
+                            <div style="margin-left: 16px;" class="form-group"> <!-- Submit button -->
+                                <button class="btn btn-primary " type="submit">Lọc</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Form code begins -->
+                    <form action="/admin/products/statistical" method="get">
+                        <div style="display: flex; align-items: flex-end;">
+                            <div class="form-group"> <!-- Date start input -->
+                            <label class="control-label">Date</label>
+                            <input style="width: 200px;" class="form-control" id="date_start" name="date_start" placeholder="MM/DD/YYY" type="date" required/>
+                            </div>
+                            <div class="form-group"> <!-- Date end input -->
+                                <label class="control-label">To</label>
+                                <input style="width: 200px;" class="form-control" id="date_end" name="date_end" placeholder="MM/DD/YYY" type="date" required/>
+                            </div>
+                            <div style="margin-left: 16px;" class="form-group"> <!-- Submit button -->
+                            <button class="btn btn-primary " type="submit">Lọc</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Form code ends --> 
+                    
                 </div>
-                <div class="row">
+               
+                <div class="row">                   
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -43,7 +104,6 @@
                                             <th data-field="price" data-sortable="true">Giá</th>
                                             <th>Ảnh sản phẩm</th>
                                             <th>Trạng thái</th>
-                                            <th>Danh mục</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -61,7 +121,6 @@
                                                 <%}else{%>
                                                     <td><span class="label label-danger">Hết hàng</span></td>
                                                 <%}%>
-                                                <td><%=products[x].cat_id.title%></td>
                                                 <td class="form-group">
                                                     <a href="/admin/products/edit/<%=products[x]._id%>" class="btn btn-primary"><i
                                                             class="glyphicon glyphicon-pencil"></i></a>
@@ -78,17 +137,17 @@
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
                                         <%if(page>1){%>
-                                        <li class="page-item"><a class="page-link" href="/admin/products/?page=<%=page-1%>">&laquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=page-1%>">&laquo;</a></li>
                                         <%}%>
                                         <%for(x in pages){%>
                                             <%if(pages[x]!=='...'){%>
-                                                <li class="page-item <%if(page===pages[x]){%> return active<%}%>"><a class="page-link" href="/admin/products/?page=<%=pages[x]%>"><%=pages[x]%></a></li>
+                                                <li class="page-item <%if(page===pages[x]){%> return active<%}%>"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=pages[x]%>"><%=pages[x]%></a></li>
                                             <%}else{%>
-                                                <li class="page-item"><a class="page-link" onclick="return false" href="/admin/products/?page=<%=pages[x]%>"><%=pages[x]%></a></li>
+                                                <li class="page-item"><a class="page-link" onclick="return false" href="/admin/<%=hrefPage%>page=<%=pages[x]%>"><%=pages[x]%></a></li>
                                             <%}%>
                                         <%}%>
                                         <%if(page<totalPages){%>
-                                        <li class="page-item"><a class="page-link" href="/admin/products/?page=<%=page+1%>">&raquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=page+1%>">&raquo;</a></li>
                                         <%}%>
                                     </ul>
                                 </nav>

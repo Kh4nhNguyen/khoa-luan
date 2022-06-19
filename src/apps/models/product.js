@@ -18,6 +18,7 @@ const productSchema = mongoose.Schema({
     slug: {
         type: String,
         required: true,
+        text:true
     },
     description: {//Mô tả sản phẩm
         type: String,
@@ -29,7 +30,8 @@ const productSchema = mongoose.Schema({
     },
     price: {//giá
         type: Number,
-        default: 0
+        default: 0,
+        text:true
     },
     status: {//trạng thái,tình trạng hàng mới hay không
         type: String,
@@ -53,9 +55,8 @@ const productSchema = mongoose.Schema({
     },
     is_stock: {//CÒn hàng hay không
         type: Boolean,
-        default: true
+        default: true,
     },
-
     // createdAt:Date,
     // updateedAt:Date
 }, {

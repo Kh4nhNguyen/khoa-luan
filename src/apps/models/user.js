@@ -14,13 +14,15 @@ const userSchema = mongoose.Schema({
     //Chặt chẽ lại dữ liệu bằng cách thêm các thuộc tính
     full_name: {
         type: String,
-        default: null
+        default: null,
         //Chặt chẽ thì type <kiểu> và có được để trống không
+        text:true
     },
     email: {
         type: String,
-        unique: true
+        unique: true,
         //unique: không được trùng,làm chặt chẽ dữ liệu
+        text:true
     },
     password: {
         type: String,

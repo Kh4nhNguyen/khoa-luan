@@ -7,7 +7,7 @@
 
 <body>
     <%-include('../layout/header.ejs')%>
-        <%-include('../layout/sidebar.ejs')%>
+        <%-include('../layout/sidebar.ejs',{status:"user"})%>
 
             <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
                 <div class="row">
@@ -23,7 +23,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">Danh sách thành viên</h1>
-                    </div>
+                    </div>  
+                </div>
+                <div id="search" style="margin-bottom: 16px;">
+                    <form class="form-inline" action="/admin/users/search">
+                        <input name="key_word" class="form-control mt-3" type="search" placeholder="Nhập tên người cần tìm..."
+                            aria-label="Search">
+                        <button class="btn btn-success mt-3" type="submit">Tìm kiếm</button>
+                    </form>
                 </div>
                 <!--/.row-->
                 <div id="toolbar" class="btn-group">

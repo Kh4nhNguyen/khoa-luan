@@ -69,7 +69,42 @@ const deleteU = async (req, res) => {
 
     res.redirect("/admin/users");
 }
+
+const search = async (req,res) => {
+    const key_word = req.query.key_word || ""
+
+    //search
+    const filter = {};
+    if (key_word) {
+        filter.$text = { $search: key_word }
+    }
+    
+    //total
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+    skip = page * limit - limit;
+
+    const total = await UserModel.find(filter).countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
+    paginate(page, totalPages);
+    const user = await UserModel.find(filter)
+        .skip(skip)
+        .limit(limit);
+    // console.log(user);
+
+    res.render("admin/user/index",
+        {
+            user: user,
+            pages: paginate(page, totalPages),
+            page: page,
+            totalPages: totalPages,
+            skip: skip
+        });
+}
+
 module.exports = {
+    search:search,
     index: indexU,
     create: createU,
     delete: deleteU,

@@ -25,12 +25,12 @@
                 <!--	End Slider	-->
 
                 <div class="col-md-8" style="margin-top: 16px;">
-                    <span><b>Ưu tiên xem: </b></span>
-                    <div class="btn-group btn-group-toggle" id="myDIV">
-                        <a class="btn mr-2 disabled"><b>Mới nhất</b></a>
-                        <a id="btn1" type=submit class="btn btn-primary mr-2 rounded" active autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-outstanding" data-value="ban-chay-nhat" .button>Nổi bật</a>
-                        <a id="btn1" class="btn btn-primary mr-2 rounded " autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-cheap" data-value="gia-thap-den-cao">Giá thấp</a>
-                        <a id="btn1" class="btn btn-primary rounded" autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-expensive" data-value="gia-cao-den-thap">Giá cao</a>
+                    <span><b>Ưu tiên xem: </b></span>                   
+                    <div class="btn-group btn-group-toggle">
+                        <a class="btn btn-primary mr-2 rounded <%if(filter===''){%> return active<%}else{%> return disabled<%}%>" autocomplete="off" role="button" href="#">Mới nhất</a>
+                        <a class="btn btn-primary mr-2 rounded <%if(filter==='outstanding'){%> return active<%}%>" autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-outstanding" data-value="outstanding" .button>Nổi bật</a>
+                        <a class="btn btn-primary mr-2 rounded <%if(filter==='cheap'){%> return active<%}%>" autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-cheap" data-value="cheap">Giá thấp</a>
+                        <a class="btn btn-primary rounded <%if(filter==='expensive'){%> return active<%}%>" autocomplete="off" role="button" href="/sort-<%=category.slug%>-<%=category.id%>-expensive" data-value="expensive">Giá cao</a>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
 <%-include("layout/footer.ejs")%>
 <!--	End Footer	-->
 <script>
-$('#btn1').on('click', function (e) {
+$('.btn').button().on('click', function (e) {
     console.log(1)
     $('#btn1').each(function () {
         $(this).addClass('active');

@@ -1,5 +1,18 @@
 <div class="product-item card text-center">
     <a href="/product-<%=product.slug%>.<%=product.id%>"><img src="/static/images/<%=product.thumbnail%>"></a>
-    <h4><a href="/product-<%=product.slug%>.<%=product.id%>"><%=product.name%></a></h4>
-    <p>Giá Bán: <span><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(product.price)%></span></p>
+    <h4><a href="/product-<%=product.slug%>.<%=product.id%>">
+            <%=product.name%>
+        </a></h4>
+    <p>Giá Bán: <span>
+            <%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(product.price)%>
+        </span></p>
+        <div id="product">
+            <ul>               
+                <%if(product.is_stock){%>
+                    <li style="list-style-type: none;" id="status"><b class="text text-success">Còn hàng</b></li>
+                <%}else{%>
+                    <li style="list-style-type: none;" id="status"><b class="text text-danger">Hết hàng</b></li>
+                <%}%>
+            </ul>
+        </div>
 </div>

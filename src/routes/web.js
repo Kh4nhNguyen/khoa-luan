@@ -108,6 +108,21 @@ router.post("/admin/products/store",
     AuthMiddleware.checkAdmin,
     ProductController.store
 )
+router.get("/admin/products/search",
+    UploadMiddleware.single("thumbnail"),
+    AuthMiddleware.checkAdmin,
+    ProductController.search
+)
+router.get("/admin/products/sort",
+    AuthMiddleware.checkAdmin,
+    ProductController.sort
+)
+router.get("/admin/products/statistical",
+    AuthMiddleware.checkAdmin,
+    ProductController.statistical
+)
+
+
 //UploadMiddleware.single("thumbnail"),thumbnail tên của trường upload
 
 router.get("/admin/products/edit/:id",
@@ -177,6 +192,11 @@ router.get("/admin/users/delete/:id",
     UserController.delete
 )
 
+router.get("/admin/users/search",
+    AuthMiddleware.checkAdmin,
+    UserController.search
+)
+
 //amdin/comments
 router.get("/admin/comments",
     AuthMiddleware.checkAdmin,
@@ -243,10 +263,20 @@ router.get("/admin/order",
     OrderController.index
 )
 
-router.get("/admin/order/complete/:id",
+router.post("/admin/order/status-:id",
     AuthMiddleware.checkAdmin,
-    OrderController.complete
+    OrderController.status
 )
+router.get("/admin/order/search",
+    AuthMiddleware.checkAdmin,
+    OrderController.search
+)
+
+router.get("/admin/order/statistical",
+    AuthMiddleware.checkAdmin,
+    OrderController.statistical
+)
+
 
 // router.get("/admin/:adminID", (req, res) => {
 //     let text = req.params.adminID;
@@ -272,7 +302,7 @@ router.post("/update-cart", SiteController.updateCart);
 router.get("/del-cart-:id", SiteController.delCart);
 router.post("/order", SiteController.order);
 router.get("/success", SiteController.success);
-router.get("/sort-:slug-:id-:condision", SiteController.querryCondision)
+router.get("/sort-:slug-:id-:filter", SiteController.sort)
 
 /*phương thức get là có truyền dữ liệu qua url (vd :id query string...) 
     post bảo mật hơn truyền qua HTTP header

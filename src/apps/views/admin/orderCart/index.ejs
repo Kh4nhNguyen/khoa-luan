@@ -7,7 +7,7 @@
 
 <body>
     <%-include('../layout/header.ejs')%>
-        <%-include('../layout/sidebar.ejs')%>
+    <%-include('../layout/sidebar.ejs',{status:"order"})%>
 
             <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
                 <div class="row">
@@ -15,23 +15,65 @@
                         <li><a href="#"><svg class="glyph stroked home">
                                     <use xlink:href="#stroked-home"></use>
                                 </svg></a></li>
-                        <li class="active">Danh sách sản phẩm</li>
+                        <li class="active">Danh sách đơn hàng</li>
                     </ol>
                 </div>
                 <!--/.row-->
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Danh sách sản phẩm</h1>
+                        <h1 class="page-header">Danh sách đơn hàng</h1>
                     </div>
                 </div>
                 <!--/.row-->
+
+                <!-- search -->
+                <div id="search" style="margin-bottom: 16px;">
+                    <form class="form-inline" action="/admin/order/search" method="get">
+                        <input name="key_word" class="form-control mt-3" type="search" placeholder="Nhập sản phẩm cần tìm..."
+                            aria-label="Search">
+                        <button class="btn btn-success mt-3" type="submit">Tìm kiếm</button>
+                    </form>
+                </div>
+                <!-- end search -->
+
+                 <!-- Form code begins -->
+                 <form action="/admin/order/statistical" method="get">
+                    <div style="display: flex; align-items: flex-end;">
+                        <div class="form-group"> <!-- Date start input -->
+                            <label class="control-label">Date</label>
+                            <input style="width: 200px;" class="form-control" id="date_start" name="date_start" placeholder="MM/DD/YYY" type="date" required/>
+                        </div>
+                        <div class="form-group"> <!-- Date end input -->
+                            <label class="control-label">To</label>
+                            <input style="width: 200px;" class="form-control" id="date_end" name="date_end" placeholder="MM/DD/YYY" type="date" required/>
+                        </div>
+                        <div class="form-group">                    
+                            <label class="control-label" for="status_order">Trạng thái</label>
+                            <select style="width: 200px;" class="form-control" id="status_order" name="status_order">s
+                                <option value="none" id="none" selected>None</option>
+                                <option value="order" id="order" >Đặt hàng</option>
+                                <option value="deliveryConfirmation" id="deliveryConfirmation">Xác nhận giao hàng</option>                       
+                                <option value="transport" id="transport">Đang giao</option>   
+                                <option value="accomplished" id="accomplished">Hoàn thành</option>
+                                <option value="cancel" id="cancel">Hủy</option>                   
+                            </select>
+                        </div>  
+                        <div style="margin-left: 16px;" class="form-group"> <!-- Submit button -->
+                            <button class="btn btn-primary " type="submit">Lọc</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Form code ends --> 
+
                 <div id="toolbar" class="btn-group">
                     <div class="col-lg-12">
+                        <%if(totalProductComplete>0){%>
                         <h1 class="page-header">Có <b style="color: #cb1c22;">
                             <%=totalProductComplete%></b> đơn hoàn thành : 
                             <b style="color: #cb1c22;"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(totalProductsPrice)%>
                             </b></h1>
+                        <%}%>
                     </div>
                 </div>
                 <div class="row">
@@ -45,8 +87,8 @@
                                             <th data-field="name" data-sortable="true">Tên sản phẩm</th>
                                             <th data-field="price" data-sortable="true">Giá</th>
                                             <th>Ảnh sản phẩm</th>                                            
-                                            <th>Danh mục</th>
-                                            <th>Hành động</th>
+                                            <th>Ngày</th>
+                                            <th>Trạng thái</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,13 +101,46 @@
                                                 <td style="text-align: center"><img width="130" height="180"
                                                         src="/static/images/<%=products[x].thumbnail%>" /></td>                                               
                                                 <td><%=products[x].createdAt.toDateString()%></td>
+                                                
+                                                <!-- select status -->
                                                 <td class="form-group">
-                                                    <%if(!products[x].is_complete){%>
-                                                    <a href="/admin/order/complete/<%=products[x]._id%>" class="btn btn-success" 
-                                                        onclick="return confirm('Bạn có xác nhận hoàn thành không?');"><i
-                                                            class="glyphicon glyphicon-ok"></i></a>
-                                                    <%}%>
+                                                    <form class="form-group" action="/admin/order/status-<%=products[x]._id%>" method="post">
+                                                        <div style="display:flex; align-items: flex-end;width: 150px;" class="form-group">  
+                                                            <select style="width: 150px;" name="order_level" class="form-control" id="order_level">
+                                                                <option value="order"
+                                                                <%if(products[x].status_order==='order'){%> return selected 
+                                                                    <%}else if(products[x].status_order!=='order'){%> return disabled
+                                                                        <%}%>                                                                    
+                                                                >Đặt hàng</option>
+                                                                <option value="deliveryConfirmation" 
+                                                                <%if(products[x].status_order==='deliveryConfirmation'){%> return selected 
+                                                                    <%}else if(products[x].status_order==='transport' || products[x].status_order==='accomplished'){%> return disabled
+                                                                    <%}%>
+                                                                >Xác nhận giao hàng</option>                                                            
+                                                                <option value="transport"
+                                                                <%if(products[x].status_order==='transport'){%> return selected 
+                                                                    <%}else if(products[x].status_order==='accomplished' || products[x].status_order==='order' || products[x].status_order==='cancel'){%> return disabled
+                                                                    <%}%>
+                                                                >Đang giao</option>
+                                                                <option value="accomplished" 
+                                                                <%if(products[x].status_order==='accomplished'){%> return selected 
+                                                                    <%}else if(products[x].status_order==='deliveryConfirmation'|| products[x].status_order==='order' || products[x].status_order==='cancel'){%> return disabled
+                                                                    <%}%>                                                                    
+                                                                >Hoàn thành</option>
+                                                                <option value="cancel" 
+                                                                <%if(products[x].status_order==='cancel'){%> return selected 
+                                                                    <%}else if(products[x].status_order==='accomplished'){%> return disabled
+                                                                        <%}%>
+                                                                >Hủy đơn hàng</option>
+                                                            </select>                                                      
+                                                            <button class="btn btn-success" type="submit"
+                                                            <%if(products[x].status_order==='accomplished'){%> return disabled <%}%>
+                                                            onclick="return confirm('Bạn có xác nhận thay đổi không?');"
+                                                            >Xác nhận</button>     
+                                                        </div>                                                      
+                                                    </form>                                                    
                                                 </td>
+
                                             </tr>
                                             <%}%>
                                     </tbody>
@@ -75,17 +150,17 @@
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
                                         <%if(page>1){%>
-                                        <li class="page-item"><a class="page-link" href="/admin/products/?page=<%=page-1%>">&laquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=page-1%>">&laquo;</a></li>
                                         <%}%>
                                         <%for(x in pages){%>
                                             <%if(pages[x]!=='...'){%>
-                                                <li class="page-item <%if(page===pages[x]){%> return active<%}%>"><a class="page-link" href="/admin/products/?page=<%=pages[x]%>"><%=pages[x]%></a></li>
+                                                <li class="page-item <%if(page===pages[x]){%> return active<%}%>"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=pages[x]%>"><%=pages[x]%></a></li>
                                             <%}else{%>
-                                                <li class="page-item"><a class="page-link" onclick="return false" href="/admin/products/?page=<%=pages[x]%>"><%=pages[x]%></a></li>
+                                                <li class="page-item"><a class="page-link" onclick="return false" href="/admin/<%=hrefPage%>page=<%=pages[x]%>"><%=pages[x]%></a></li>
                                             <%}%>
                                         <%}%>
                                         <%if(page<totalPages){%>
-                                        <li class="page-item"><a class="page-link" href="/admin/products/?page=<%=page+1%>">&raquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="/admin/<%=hrefPage%>page=<%=page+1%>">&raquo;</a></li>
                                         <%}%>
                                     </ul>
                                 </nav>

@@ -10,7 +10,7 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
         //required:true không được để trống
-        text: true,//kích hoạt text search
+        text: true,//kích hoạt text search,
     },
     description: {//Mô tả sản phẩm
         type: String,
@@ -28,8 +28,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: null,
     },
-    is_complete: {
-        type: Boolean
+    status_order:{
+        type:String,
+        enum:["order","deliveryConfirmation","transport","accomplished","cancel"],
+        default:"order",
     }
     // createdAt:Date,
     // updateedAt:Date

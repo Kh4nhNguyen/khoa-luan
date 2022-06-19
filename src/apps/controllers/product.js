@@ -6,16 +6,13 @@ const path = require("path");
 const slug = require("slug");
 
 const indexP = async (req, res) => {
-    //đoẠN Code xử lý phân trang
-    const page = parseInt(req.query.page) || 1;//parseInt() ép kiểu về dạng số nguyên
-    //Toán tử 3 ngôi page = A||B nếu k có a thì bằng b
+    const hrefPage = 'products?'
+    const page = parseInt(req.query.page) || 1;
     const limit = 5;
     skip = page * limit - limit;
 
-    //ĐOạn code xử lý thanh phân trang phải viết dưới code phân trang vì cần page để sử dụng
-    const total = await ProductModel.find().countDocuments();//countDocuments() tổng sô document trong collection products
-    //càn tách ra 2 lần Pro..find() bởi vì cần lấy giá trị tính toán count trước nên k lồng xuống bên dưới được
-    const totalPages = Math.ceil(total / limit);//Math.ceil hàm làm tròn lên
+    const total = await ProductModel.find().countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     paginate(page, totalPages);
 
@@ -23,9 +20,9 @@ const indexP = async (req, res) => {
         .populate({ path: "cat_id" })
         .skip(skip)
         .limit(limit)
-        .sort({ "_id": -1 })//sắp xếp kết quả trả về theo trường _id,1 là tăng dần,-1 giảm dần
-        ;
+        .sort({ "_id": -1 })
 
+    const categories = await CategoryModel.find()
     res.render("admin/product/index",
         {
             products: products,
@@ -33,8 +30,11 @@ const indexP = async (req, res) => {
             page: page,
             totalPages: totalPages,
             skip: skip,
+            categories: categories,
+            hrefPage: hrefPage
         });
 }
+
 const createP = async (req, res) => {
 
     const categories = await CategoryModel.find();
@@ -146,20 +146,160 @@ const updateP = async (req, res) => {
 }
 
 const deleteP = async (req, res) => {
-
     const id = req.params.id;
-    //req là lấy dữ liệu lên
-    //id lấy ở đường dẫn.
 
     await ProductModel.deleteOne({ _id: id });
 
     res.redirect("/admin/products");
 }
+
+const search = async (req, res) => {
+    const key_word = req.query.key_word || "";
+    const pageQuerry = req.query.page
+    const hrefPage = `products/search?key_word=${key_word}&`
+
+    const filter = {};
+    if (key_word) {
+        filter.$text = { $search: key_word }
+    }
+
+    const page = parseInt(pageQuerry) || 1
+
+    const limit = 5;
+    skip = page * limit - limit;
+
+    const total = await ProductModel.find(filter).countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
+    paginate(page, totalPages);
+
+    const products = await ProductModel.find(filter)
+        .populate({ path: "cat_id" })
+        .skip(skip)
+        .limit(limit)
+        .sort({ "_id": -1 })
+
+    res.render("admin/product/index",
+        {
+            products: products,
+            pages: paginate(page, totalPages),
+            page: page,
+            totalPages: totalPages,
+            skip: skip,
+            hrefPage: hrefPage
+        });
+}
+
+const sort = async (req, res) => {
+    const cat_id = req.query.category
+    const featured = true ? req.query.featured === "true" : false
+    const price = parseInt(req.query.price)
+    const pageQuerry = req.query.page
+    const hrefPage = `products/sort?category=${cat_id}&featured=${featured}&price=${price}&`
+
+    const categories = await CategoryModel.find()
+    const page = parseInt(pageQuerry) || 1;
+    const limit = 5;
+    skip = page * limit - limit;
+
+    if (featured) {
+        var total = await ProductModel.find({
+            cat_id: cat_id, featured: featured
+        }).countDocuments();
+
+        if (price) {
+            var products = await ProductModel.find({
+                cat_id: cat_id, featured: featured
+            }).skip(skip).limit(limit).sort({ price: price })
+        } else {
+            var products = await ProductModel.find({
+                cat_id: cat_id, featured: featured
+            }).skip(skip).limit(limit).sort({ "_id": -1 })
+        }
+
+    } else {
+        var total = await ProductModel.find({
+            cat_id: cat_id,
+        }).countDocuments();
+        if (price) {
+            var products = await ProductModel.find({
+                cat_id: cat_id
+            }).skip(skip).limit(limit).sort({ price: price })
+        } else {
+            var products = await ProductModel.find({
+                cat_id: cat_id
+            }).skip(skip).limit(limit).sort({ "_id": -1 })
+        }
+    }
+
+    const totalPages = Math.ceil(total / limit);
+    paginate(page, totalPages);
+
+    res.render("admin/product/index",
+        {
+            products: products,
+            pages: paginate(page, totalPages),
+            page: page,
+            totalPages: totalPages,
+            skip: skip,
+            categories: categories,
+            hrefPage: hrefPage
+        });
+
+}
+
+const statistical = async (req, res) => {
+    const date_start = req.query.date_start
+    const date_end = req.query.date_end
+    const pageQuerry = req.query.page
+    const hrefPage = `products/statistical?date_start=${date_start}&date_end=${date_end}&`
+
+    const start = new Date(date_start).toISOString()
+    const end = new Date(new Date(date_end).setHours(23, 59, 59, 999)).toISOString()
+
+    const page = parseInt(pageQuerry) || 1;
+    const limit = 5;
+    skip = page * limit - limit;
+
+    const total = await ProductModel.find({
+        createdAt: {
+            $gte: start,
+            $lt: end
+        }
+    }).countDocuments();
+
+    const totalPages = Math.ceil(total / limit);
+
+    paginate(page, totalPages);
+
+    const products = await ProductModel.find({
+        createdAt: {
+            $gte: start,
+            $lt: end
+        }
+    }).skip(skip).limit(limit).sort({ "_id": -1 })
+
+    const categories = await CategoryModel.find()
+    res.render("admin/product/index",
+        {
+            products: products,
+            pages: paginate(page, totalPages),
+            page: page,
+            totalPages: totalPages,
+            skip: skip,
+            categories: categories,
+            hrefPage: hrefPage
+        });
+}
+
 module.exports = {
     index: indexP,
     create: createP,
     store: store,
     edit: editP,
     delete: deleteP,
-    update: updateP
+    update: updateP,
+    search: search,
+    sort: sort,
+    statistical: statistical
 }

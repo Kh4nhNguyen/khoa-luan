@@ -30,6 +30,7 @@ const home = async (req, res) => {
 const category = async (req, res) => {
     const id = req.params.id;
     const slug = req.params.slug;
+    const filter=""
 
     const category = await CategoryModel.findById({
         _id: id
@@ -61,6 +62,7 @@ const category = async (req, res) => {
         pages: paginate(page, totalPage),
         totalPage: totalPage,
         page: page,
+        filter:filter
     });
 }
 
@@ -251,12 +253,12 @@ const success = (req, res) => {
     res.render("site/success");
 }
 
-const querryCondision = async (req, res) => {
+const sort = async (req, res) => {
     const id = req.params.id
     const slug = req.params.slug
-    const condision = req.params.condision
+    const filter = req.params.filter
 
-    if (condision === 'outstanding') {
+    if (filter === 'outstanding') {
         const category = await CategoryModel.findById({
             _id: id
         })
@@ -289,9 +291,9 @@ const querryCondision = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            condision:condision
+            filter:filter
         });
-    }else if(condision === 'cheap'){
+    }else if(filter === 'cheap'){
         const category = await CategoryModel.findById({
             _id: id
         })
@@ -324,7 +326,7 @@ const querryCondision = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            condision:condision
+            filter:filter
         });
     }else{
         const category = await CategoryModel.findById({
@@ -359,7 +361,7 @@ const querryCondision = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            condision:condision
+            filter:filter
         });
     }
 
@@ -377,5 +379,5 @@ module.exports = {
     updateCart: updateCart,
     delCart: delCart,
     order: order,
-    querryCondision: querryCondision
+    sort: sort
 }
