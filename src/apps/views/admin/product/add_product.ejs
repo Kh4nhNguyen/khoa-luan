@@ -44,19 +44,24 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Bảo hành</label>
-                                    <input required name="warranty" type="text" class="form-control">
+                                    <select class="form-control" id="warranty" name="warranty">
+                                        <option value="none" id="none" >None</option>
+                                        <option value="3 Tháng" id="3" >3 Tháng</option>
+                                        <option value="6 Tháng" id="6" >6 Tháng</option>                       
+                                        <option value="12 Tháng" id="12" >12 Tháng</option>      
+                                    </select>      
                                 </div>    
                                 <div class="form-group">
                                     <label>Phụ kiện</label>
-                                    <input required name="accessories" type="text" class="form-control">
+                                    <input required name="accessories" type="text" class="form-control" value="Hộp, sách, sạc, cáp, tai nghe">
                                 </div>                  
                                 <div class="form-group">
                                     <label>Khuyến mãi</label>
-                                    <input required name="promotion" type="text" class="form-control">
+                                    <input required name="promotion" type="text" class="form-control" value="Dán Màn Hình 4D">
                                 </div>  
                                 <div class="form-group">
                                     <label>Tình trạng</label>
-                                    <input required name="status" type="text" class="form-control">
+                                    <input required name="status" type="text" class="form-control" value="Máy mới 100%">
                                 </div>  
                                 
                             </div>

@@ -1,44 +1,60 @@
 const mongoose = require("../../common/database")();
 
 const orderSchema = mongoose.Schema({
-    prd_id: {
-        type: mongoose.Types.ObjectId,
-        ref: "Products",
-        required: true,
-    },
     name: {
         type: String,
-        required: true,
-        //required:true không được để trống
-        text: true,//kích hoạt text search,
-    },
-    description: {//Mô tả sản phẩm
-        type: String,
-        default: null
-    },
-    thumbnail: {//ảnh mô tả sp
-        type: String,
-        default: null
-    },
-    price: {//giá
-        type: Number,
-        default: 0
-    },
-    status: {//trạng thái,tình trạng hàng mới hay không
-        type: String,
         default: null,
+        text: true
     },
-    status_order:{
-        type:String,
-        enum:["order","deliveryConfirmation","transport","accomplished","cancel"],
-        default:"order",
-    }
-    // createdAt:Date,
-    // updateedAt:Date
+    phone: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    status_order: {
+        type: String,
+        enum: ["order", "deliveryConfirmation", "transport", "accomplished", "cancel"],
+        default: "order",
+    },
+    qty: {
+        type: Number,
+        require: true
+    },
+    prd: [{
+        id: {
+            type: String,
+            required: true,
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        img: {
+            type: String,
+            required: true,
+        },
+        qty: {
+            type: Number,
+            required: true,
+        },
+    }],
+
 }, {
     timestamps: true,
-    //tham số thứ 2 tạo schema tự động tạo 2 trường createdAt và updateAt
 })
+
+orderSchema.index({ customer_name: 'text' });
 
 const OrderModel = mongoose.model("Orders", orderSchema, "orders");
 

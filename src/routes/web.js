@@ -276,6 +276,10 @@ router.get("/admin/order/statistical",
     AuthMiddleware.checkAdmin,
     OrderController.statistical
 )
+router.get("/admin/order/sort",
+    AuthMiddleware.checkAdmin,
+    OrderController.sort
+)
 
 
 // router.get("/admin/:adminID", (req, res) => {

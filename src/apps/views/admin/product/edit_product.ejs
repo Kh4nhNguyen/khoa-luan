@@ -51,13 +51,17 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Bảo hành</label>
-                                            <input type="text" name="warranty" required value="<%=product.warranty%>"
-                                                class="form-control">
+                                            <select class="form-control" id="warranty" name="warranty">
+                                                <option value="none" id="none" <%if(product.warranty==="none"){%> return  selected <%}%>>None</option>
+                                                <option value="3 Tháng" id="order" <%if(product.warranty==="3 Tháng"){%> return  selected <%}%> >3 Tháng</option>
+                                                <option value="6 Tháng" id="deliveryConfirmation" <%if(product.warranty==="6 Tháng"){%> return  selected <%}%> >6 Tháng</option>                       
+                                                <option value="12 Tháng" id="transport" <%if(product.warranty==="12 Tháng"){%> return  selected <%}%> >12 Tháng</option>      
+                                            </select>        
                                         </div>
                                         <div class="form-group">
                                             <label>Phụ kiện</label>
                                             <input type="text" name="accessories" required
-                                                value="<%=product.accessories%>" class="form-control">
+                                                value="<%=product.accessories%>" class="form-control">                                                
                                         </div>
                                         <div class="form-group">
                                             <label>Khuyến mãi</label>

@@ -30,7 +30,7 @@ const home = async (req, res) => {
 const category = async (req, res) => {
     const id = req.params.id;
     const slug = req.params.slug;
-    const filter=""
+    const filter = ""
 
     const category = await CategoryModel.findById({
         _id: id
@@ -39,15 +39,13 @@ const category = async (req, res) => {
     const products_1 = await ProductModel.find({
         cat_id: id,
     }).sort({ _id: -1 })
-    const totals = products_1.length;//Tong product
+    const totals = products_1.length;
 
-    //Phan trang
-    const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+    const page = parseInt(req.query.page) || 1;
     const limit = 12;
     const skip = page * limit - limit;
-    const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
-    const totalPage = Math.ceil(total / limit);//làm tròn lên
-    // console.log(page);
+    const total = await ProductModel.find({ cat_id: id }).countDocuments();
+    const totalPage = Math.ceil(total / limit);
 
     paginate(page, totalPage);
     const products = await ProductModel.find({
@@ -62,7 +60,7 @@ const category = async (req, res) => {
         pages: paginate(page, totalPage),
         totalPage: totalPage,
         page: page,
-        filter:filter
+        filter: filter
     });
 }
 
@@ -104,8 +102,6 @@ const comment = async (req, res) => {
     }
     await new CommentModel(comment).save();
 
-    // res.redirect("/product-"+slug+"."+id);
-    // res.redirect("back");
     res.redirect(req.path);
 }
 
@@ -125,22 +121,18 @@ const search = async (req, res) => {
 
 const addToCart = async (req, res) => {
     const body = req.body;
-    let items = req.session.cart;//middlewares/cart
+    let items = req.session.cart;
 
-    console.log(body)
     let isUpdate = false;
-    //Mua lại sản phẩm cũ
+
+    //Mua lai sp cu
     items.map((item) => {
         if (item.id === body.id) {
             isUpdate = true;
             item.qty += parseInt(body.qty);
-            /*cần ép kiểu do khi dùng form thì tất cả
-            dữ liệu gửi đi đều là string nên cần ép kiểu */
         }
         return item;
     })
-    /*vong lap map duyet tung phan tu va sua dc du lieu ben trong
-    */
 
     //Mua thêm sp mới
     if (!isUpdate) {
@@ -179,15 +171,6 @@ const updateCart = (req, res) => {
             item.qty = parseInt(products[item.id]["qty"]);
         }
     })
-    /*products[item.id]["qty"] mảng 2 chiều prodcuts[key1][key2] 
-    console.log(products) sẽ xuất ra dạng {
-        "dãy số id":{qty:"number"}
-    }k xd được tên đối tượng key1
-    console.log(products[item.id]) so sánh luôn giá trị [key1] với item.id truy cập lấy luôn dư liệu [key2] = { qty: '4' }
-    console.log(products[item.id]["qty"]) như bên trên nhưng truy cập vào [key2] với đối tượng "qty" thì chỉ lấy value = 4
-    if(products[item.id]) so sánh chéo kiểm tra products[key] so sánh luôn giá trị key với item.id xem có bằng nhau không
-    */
-    // console.log(items)
     req.session.cart = items;
     res.redirect("/cart");
 }
@@ -206,42 +189,44 @@ const delCart = (req, res) => {
 }
 
 const order = async (req, res) => {
+    let status = "order"
     const items = req.session.cart;
     const body = req.body;
 
-    const orderCartId = items[0].id
-    const orderCart = await ProductModel.findById(orderCartId)
-
     const prodcut = ({
-        prd_id: orderCart._id,
-        name: orderCart.name,
-        description: orderCart.description,
-        thumbnail: orderCart.thumbnail,
-        price: orderCart.price,
-        status: orderCart.status,
-        is_complete: false
+        name: body.name,
+        phone: body.phone,
+        address: body.add,
+        email: body.mail,
+        prd: items.map(item => item)
     })
+    console.log(prodcut)
     new OrderModel(prodcut).save();
 
     const viewPath = req.app.get("views");
-    /*đường dẫn tuyệt đối tới thư mục views
-    path.join(viewPath,"site/email-order.ejs") nối đường dẫn ở tham số 2 vào sau tham số 1
-    */
+
+    let totalPrice = 0
+    items.map(product => {
+        totalPrice += product.qty * product.price
+        return totalPrice
+    })
+
     const html = await ejs.renderFile(
         path.join(viewPath, "site/email-order.ejs"),
         {
             name: body.name,
             phone: body.phone,
             add: body.add,
-            totalPrice: 0,
+            totalPrice: totalPrice,
             items,
-        }//truyen du lieu sang email-order.ejs
+            status: status
+        }
     );
 
     await transporter.sendMail({
         to: body.mail,
         from: "QK Shop",
-        subject: "Xác nhận đơn hàng từ QK Shop",
+        subject: "Thông tin đơn hàng từ QK Shop",
         html,
     });
 
@@ -291,9 +276,9 @@ const sort = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            filter:filter
+            filter: filter
         });
-    }else if(filter === 'cheap'){
+    } else if (filter === 'cheap') {
         const category = await CategoryModel.findById({
             _id: id
         })
@@ -326,9 +311,9 @@ const sort = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            filter:filter
+            filter: filter
         });
-    }else{
+    } else {
         const category = await CategoryModel.findById({
             _id: id
         })
@@ -361,7 +346,7 @@ const sort = async (req, res) => {
             pages: paginate(page, totalPage),
             totalPage: totalPage,
             page: page,
-            filter:filter
+            filter: filter
         });
     }
 

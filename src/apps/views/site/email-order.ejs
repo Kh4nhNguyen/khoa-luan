@@ -11,29 +11,49 @@
     <b>Địa chỉ:</b> <%=add%><br>
 </p>
 
-<table border="1" cellspacing="0" cellpadding="10" bordercolor="#305eb3" width="100%">
-	<tr bgcolor="#305eb3">
-    	<td width="70%"><b><font color="#FFFFFF">Sản phẩm</font></b></td>
-        <td width="10%"><b><font color="#FFFFFF">Số lượng</font></b></td>
-        <td width="20%"><b><font color="#FFFFFF">Tổng tiền</font></b></td>
-    </tr>
-    <%for(let item of items){%>
-    <%totalPrice = item.qty*item.price%>
-    <tr>
-    	<td width="70%"><%=item.name%></td>
-        <td width="10%"><%=item.qty%></td>
-        <td width="20%"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(item.price*item.qty)%></td>
-    </tr>
-    <%}%>
-    <tr>
-    	<td colspan="2" width="70%"></td>
-        <td width="20%"><b><font color="#FF0000"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(totalPrice)%></font></b></td>
-    </tr>
-</table>
+<%if(status==='accomplished'){%>
+    <h1>Kính gửi  <%=name%></h1>
+    <p>Lời đầu tiên xin được thay mặt toàn bộ đội ngũ nhân viên gửi lời cảm ơn chân thành và sâu sắc nhất tới Quý khách hàng đã đồng hành, hợp tác cũng như ủng hộ cửa hàng trong thời gian qua.</p>
+    <p>Chính những sự yêu mến và niềm tin của Quý khách hàng là niềm tự hào và thành công lớn nhất của chúng tôi, đồng thời cũng là động lực để chúng tôi tiếp tục phát triển trong tương lai. </p>
+    <p>Hy vọng trong thời gian sắp tới, mối quan hệ của hai bên càng lúc càng bên chặt. Chúng tôi sẽ không ngừng phát triển, nâng cao chất lượng dịch vụ để có thể phục vụ Quý khách hàng tốt hơn. </p>
+    <p>Một lần nữa, chúng tôi xin gửi lời cảm ơn chân thành và sự tri ân sâu sắc tới Quý khách hàng. </p>
+    <p><b>Trân Trọng!</b></p>
+    <br/>
+    <br/>
+<%}else{%>
+    <table border="1" cellspacing="0" cellpadding="10" bordercolor="#305eb3" width="100%">
+        <tr bgcolor="#305eb3">
+            <td width="70%"><b><font color="#FFFFFF">Sản phẩm</font></b></td>
+            <td width="10%"><b><font color="#FFFFFF">Số lượng</font></b></td>
+            <td width="20%"><b><font color="#FFFFFF">Tổng tiền</font></b></td>
+        </tr>
+        <%for(let item of items){%>        
+        <tr>
+            <td width="70%"><%=item.name%></td>
+            <td width="10%"><%=item.qty%></td>
+            <td width="20%"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(item.price*item.qty)%></td>
+        </tr>
+        <%}%>
+        <tr>
+            <td colspan="2" width="70%"></td>
+            <td width="20%"><b><font color="#FF0000"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(totalPrice)%></font></b></td>
+        </tr>
+    </table>
+<%}%>
 
-<p>
-	Cám ơn quý khách đã mua hàng tại Shop của chúng tôi, bộ phận giao hàng sẽ liên hệ với quý khách để xác nhận sau 5 phút kể từ khi đặt hàng thành công và chuyển hàng đến quý khách chậm nhất sau 24 tiếng.
-</p>
+<%if(status==='cancel') {%>
+    <p>
+        Đơn hàng của quý khách đã được hủy, nếu muốn đặt lại quý khách vui lòng liên hệ <b style="color: #eb1f27;">0988950209</b> để biết thêm chi tiết.
+    </p>
+<%}else if(status==='transport') {%>
+    <p>
+        Cám ơn quý khách đã mua hàng tại Shop của chúng tôi, đơn hàng của quý khách đã chuyển giao bộ phận giao hàng, quý khách vui lòng để ý bên giao hàng liên hệ.
+    </p>
+<%} else {%>
+    <p>
+        Cám ơn quý khách đã mua hàng tại Shop của chúng tôi, bất kỳ thắc mắc nào xin vui lòng liên hệ <b style="color: #eb1f27;">0988950209</b> để biết thêm chi tiết.
+    </p>
+<%}%>
 
 </body>
 </html>

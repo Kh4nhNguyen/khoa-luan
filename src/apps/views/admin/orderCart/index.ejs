@@ -36,7 +36,24 @@
                     </form>
                 </div>
                 <!-- end search -->
-
+                <form action="/admin/order/sort" method="get">
+                    <div style="display: flex; align-items: flex-end;">
+                        <div class="form-group">                    
+                            <label class="control-label" for="status_order">Trạng thái đơn hàng</label>
+                            <select style="width: 200px;" class="form-control" id="status_order" name="status_order">
+                                <option value="none" id="none" selected>None</option>
+                                <option value="order" id="order" >Đặt hàng</option>
+                                <option value="deliveryConfirmation" id="deliveryConfirmation">Xác nhận giao hàng</option>                       
+                                <option value="transport" id="transport">Đang giao</option>   
+                                <option value="accomplished" id="accomplished">Hoàn thành</option>
+                                <option value="cancel" id="cancel">Hủy</option>                   
+                            </select>                        
+                        </div>  
+                        <div style="margin-left: 16px;" class="form-group"> <!-- Submit button -->
+                            <button class="btn btn-primary " type="submit">Lọc</button>
+                        </div>
+                    </div>
+                </form>
                  <!-- Form code begins -->
                  <form action="/admin/order/statistical" method="get">
                     <div style="display: flex; align-items: flex-end;">
@@ -61,7 +78,7 @@
                         </div>  
                         <div style="margin-left: 16px;" class="form-group"> <!-- Submit button -->
                             <button class="btn btn-primary " type="submit">Lọc</button>
-                        </div>
+                        </div>                       
                     </div>
                 </form>
                 <!-- Form code ends --> 
@@ -84,9 +101,11 @@
                                     <thead>
                                         <tr>
                                             <th data-field="id" data-sortable="true">ID</th>
-                                            <th data-field="name" data-sortable="true">Tên sản phẩm</th>
-                                            <th data-field="price" data-sortable="true">Giá</th>
-                                            <th>Ảnh sản phẩm</th>                                            
+                                            <th data-field="customer_name" data-sortable="true">Khách hàng</th>
+                                            <th data-field="customer_phone" >Số điện thoại</th>
+                                            <th data-field="customer_addr" >Địa chỉ</th>
+                                            <th data-field="customer_mail" >Thư điện tử</th>                                           
+                                            <th data-field="name" data-sortable="true">Thông tin đơn hàng</th>                                                                                                                                 
                                             <th>Ngày</th>
                                             <th>Trạng thái</th>
                                         </tr>
@@ -95,17 +114,25 @@
                                         <% let count=1%>
                                         <%for(x in products){%>
                                             <tr>
-                                                <td style=""><%= skip + count++%></td>
-                                                <td style=""><%=products[x].name%></td>
-                                                <td style=""><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(products[x].price)%></td>
-                                                <td style="text-align: center"><img width="130" height="180"
-                                                        src="/static/images/<%=products[x].thumbnail%>" /></td>                                               
-                                                <td><%=products[x].createdAt.toDateString()%></td>
-                                                
+                                                <td ><%= skip + count++%></td>
+                                                <td><%=products[x].name%></td>
+                                                <td><%=products[x].phone%></td>
+                                                <td><%=products[x].address%></td>
+                                                <td><%=products[x].email%></td>                                               
+
+                                                <%for(y in products[x].prd){%>
+                                                    <td style="display: inherit">
+                                                        <%=products[x].prd[y].name%> -                                                       
+                                                        <b style="color: #cb1c22;"><%=new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND"}).format(products[x].prd[y].price)%></b>
+                                                        *<b><%=products[x].prd[y].qty%></b>
+                                                    </td>                                                    
+                                                <%}%>  
+                                                <td><%=products[x].createdAt.toDateString()%></td>              
+
                                                 <!-- select status -->
                                                 <td class="form-group">
                                                     <form class="form-group" action="/admin/order/status-<%=products[x]._id%>" method="post">
-                                                        <div style="display:flex; align-items: flex-end;width: 150px;" class="form-group">  
+                                                        <div class="form-group">  
                                                             <select style="width: 150px;" name="order_level" class="form-control" id="order_level">
                                                                 <option value="order"
                                                                 <%if(products[x].status_order==='order'){%> return selected 

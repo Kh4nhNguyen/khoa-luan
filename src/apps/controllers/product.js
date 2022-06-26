@@ -1,4 +1,4 @@
-const CategoryModel = require("../models/category");//cần require vào vì bên dưới có populate lấy dữ liệu chậm k load lại client đc
+const CategoryModel = require("../models/category");
 const ProductModel = require("../models/product");
 const paginate = require("../../common/paginate");
 const fs = require("fs");
@@ -36,9 +36,7 @@ const indexP = async (req, res) => {
 }
 
 const createP = async (req, res) => {
-
     const categories = await CategoryModel.find();
-    // console.log(categories);
 
     res.render("admin/product/add_product", {
         categories: categories,
@@ -46,16 +44,9 @@ const createP = async (req, res) => {
 }
 
 const store = (req, res) => {
-    /**
-    req.body lúc này là của multer chứ k phải của body-parser vì dùng 
-    enctype=”multipart/form-data” trong form upload
-    khi dùng multer thì k dùng đc body-parser
-     */
-    const body = req.body//Lấy data ở dạng form<các thành phần trong form>
-    const file = req.file//Láy data ở dạng upload<các thành phần file>
+    const body = req.body
+    const file = req.file
 
-    //console.log(body.name);//Tên mình nhập ở form
-    //console.log(file.originalname);//Tên file khi nhập
     const product = ({
         name: body.name,
         price: body.price,
@@ -67,31 +58,16 @@ const store = (req, res) => {
         is_stock: body.is_stock,
         featured: body.featured === "on",
         description: body.description,
-        slug: slug(body.name),//Chuyển thành slug<liên quan đến SEO>
-        /* thumbnail<img> chưa thêm vào luôn 
-        bởi vì chưa chắc đã thêm ảnh nên cần xử lý file */
+        slug: slug(body.name),
     })
 
     if (file) {
         const thumbnail = "products/" + file.originalname;
         product["thumbnail"] = thumbnail;
-        /*Thêm 1 đối tượng vào object
-        có câu lệnh object["từ khóa"] = giá trị;
-                    object.từ khóa = giá trị
-        */
 
-        //Di chuyển file
         fs.renameSync(file.path, path.resolve("src/public/images/", thumbnail));
-        /* path.resolve nối đường dẫn - đường dẫn tương đối 
-            truy nhập từ đưỡng dẫn tạm vào đường dẫn thực
-        */
     }
-
-    /*
-    const data = ProductModel(product)
-    data.save(); */
-
-    new ProductModel(product).save();//Lưu lại dữ liệu
+    new ProductModel(product).save();
     res.redirect("/admin/products");
 }
 
@@ -101,7 +77,6 @@ const editP = async (req, res) => {
     const product = await ProductModel.findById(id);
     const categories = await CategoryModel.find();
 
-    console.log(product);
     res.render("admin/product/edit_product", {
         product: product,
         categories: categories,
@@ -113,6 +88,7 @@ const updateP = async (req, res) => {
     const body = req.body;
     const file = req.file;
 
+    console.log(body)
     const product = ({
         name: body.name,
         price: body.price,
@@ -124,22 +100,13 @@ const updateP = async (req, res) => {
         is_stock: body.is_stock,
         featured: body.featured === "on",
         description: body.description,
-        slug: slug(body.name),//Chuyển thành slug<liên quan đến SEO>
-        /* thumbnail<img> chưa thêm vào luôn 
-        bởi vì chưa chắc đã thêm ảnh nên cần xử lý file */
+        slug: slug(body.name),
     })
     if (file) {
         const thumbnail = "products/" + file.originalname;
         product["thumbnail"] = thumbnail;
-        /*Thêm 1 đối tượng vào object
-        có câu lệnh object["từ khóa"] = giá trị;
-        */
 
-        //Di chuyển file
         fs.renameSync(file.path, path.resolve("src/public/images/", thumbnail));
-        /* path.resolve nối đường dẫn - đường dẫn tương đối 
-            truy nhập từ đưỡng dẫn tạm vào đường dẫn thực
-        */
     }
     await ProductModel.updateOne({ _id: id }, { $set: product });
     res.redirect("/admin/products");
