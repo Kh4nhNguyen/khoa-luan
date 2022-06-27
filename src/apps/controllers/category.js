@@ -10,8 +10,8 @@ const indexC = async (req, res) => {
     const limit = 5;
     skip = page * limit - limit;
 
-    const total = await CategoryModel.find().countDocuments();//đếm sô document trong collection
-    const totalPages = Math.ceil(total / limit);//Tinh tong so trang
+    const total = await CategoryModel.find().countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     paginate(page, totalPages);
 
@@ -19,7 +19,6 @@ const indexC = async (req, res) => {
         .skip(skip)
         .limit(limit);
 
-    // console.log(category);
     res.render("admin/category/index",
         {
             category: category,
@@ -45,7 +44,7 @@ const storeC = (req, res) => {
 
     new CategoryModel(category).save();
 
-    res.redirect("/admin/categories")//chuyển hướng đến router
+    res.redirect("/admin/categories")
 }
 
 

@@ -19,58 +19,6 @@ const OrderController = require('../apps/controllers/order')
 const AuthMiddleware = require("../apps/middlewares/auth");
 const UploadMiddleware = require("../apps/middlewares/upload");
 
-//test
-router.get("/test",
-    // (req, res, next) => {
-    //     const a = 10;
-    //     if (a > 0) {
-    //         return res.redirect("/admin/login");
-    //     }
-    //     next();//Cần đứng sau hàm kiểm tra, nếu đứng trước thì chạy lệnh next luôn.
-    // },
-    TestController.testKey);
-/* TestController = đối tượng mudule.export
-    TestController tên ngẫu nhiên tùy ý
-    TestController.test gọi tới key test trong mudule.export
-*/
-
-router.get("/test2", TestController.testKey2);
-router.get("/test3", TestController.testKey3);
-
-//test-upload
-
-const multer = require("multer");
-const upload = multer({
-    dest: __dirname + "./../../temp",
-});// tạo đường dẫn tuyệt đối cần __dirname
-
-router.get("/upload", TestController.formUpload);
-router.post("/upload", upload.single("file_upload"), TestController.fileUpload);
-/* khi chạy client có form trong TestController.formUpload có input upload name="file_upload"
-    tại đây bắt đầu chuyển dữ liệu vừa up từ input có name="file_upload" sang temp với đường dẫn dest: ...
-    temp là thư muc tạm thời khi up dữ liệu được chuyển từ form qua để lưu trữ tạm thời chứ k up thẳng lên server
-*/
-
-//ex về lấy dữ liệu
-router.get("/form", (req, res) => {
-    res.send(`
-        <form method=post>
-            <input type=text name=mail />
-            <input type=text name=pass />
-            <input type=submit name=sbm value=Submit />
-        </form>
-    `)
-})
-router.post("/form", (req, res) => {
-    const mail = req.body.mail;
-    const pass = req.body.pass;
-    res.send(`${mail} + "-" + ${pass}`);
-    /* phải có urlencoded thì mới nhận đc dữ liệu từ form bên trên
-    req.body là đọc trong body form,dữ liệu cần lấy thì lấy với tên tương ứng
-    req.body.name
-    */
-})
-
 // admin
 router.get("/admin/login",
     AuthMiddleware.checkLogin,
@@ -281,20 +229,6 @@ router.get("/admin/order/sort",
     OrderController.sort
 )
 
-
-// router.get("/admin/:adminID", (req, res) => {
-//     let text = req.params.adminID;
-//     console.log(text);
-//     res.send("Welcome to " + text + " page")
-// })
-
-// router.get("/admin/:adminID/:funcID", (req, res) => {
-//     let text = req.params.adminID;
-//     console.log(text);
-//     res.send("Welcome to " + text + " page")
-// })
-
-//routerSite(fontend)
 router.get("/", SiteController.home);
 router.get("/category-:slug.:id", SiteController.category);
 router.get("/product-:slug.:id", SiteController.product);
@@ -307,9 +241,5 @@ router.get("/del-cart-:id", SiteController.delCart);
 router.post("/order", SiteController.order);
 router.get("/success", SiteController.success);
 router.get("/sort-:slug-:id-:filter", SiteController.sort)
-
-/*phương thức get là có truyền dữ liệu qua url (vd :id query string...) 
-    post bảo mật hơn truyền qua HTTP header
-*/
 
 module.exports = router;

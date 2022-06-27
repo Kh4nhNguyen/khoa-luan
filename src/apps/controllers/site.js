@@ -19,8 +19,7 @@ const home = async (req, res) => {
         is_stock: true,
         featured: true,
     }).limit(6);
-    // console.log(LatestProducts);
-    // console.log(FeaturedProducts);
+
     res.render("site/index", {
         LatestProducts: LatestProducts,
         FeaturedProducts: FeaturedProducts,
@@ -76,14 +75,6 @@ const product = async (req, res) => {
         prd_id: id
     })
 
-    // if(comments.length === 0){
-    //     comments = ({
-    //         full_name:"Admin",
-    //         createAt: new Date(),
-    //         body:"Hiện chưa có bình luận nào cho sản phẩm này"
-    //     })
-    // }
-
     res.render("site/product", {
         product: product,
         comments: comments
@@ -125,7 +116,6 @@ const addToCart = async (req, res) => {
 
     let isUpdate = false;
 
-    //Mua lai sp cu
     items.map((item) => {
         if (item.id === body.id) {
             isUpdate = true;
@@ -152,10 +142,8 @@ const addToCart = async (req, res) => {
 }
 
 const cart = (req, res) => {
-
     const products = req.session.cart;
-
-    // console.log(products);
+    
     res.render("site/cart", {
         products: products,
         totalPrice: 0
@@ -253,15 +241,14 @@ const sort = async (req, res) => {
             cat_id: id, featured: true
         }).sort({ _id: -1 })
 
-        const totals = products_1.length;//Tong product
+        const totals = products_1.length;
 
-        //Phan trang
-        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const page = parseInt(req.query.page) || 1;
         const limit = 12;
         const skip = page * limit - limit;
-        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
-        const totalPage = Math.ceil(total / limit);//làm tròn lên
-        // console.log(page);
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();
+        const totalPage = Math.ceil(total / limit);
+        
 
         paginate(page, totalPage);
         const products = await ProductModel.find({
@@ -288,15 +275,14 @@ const sort = async (req, res) => {
             cat_id: id,
         }).sort({ price: 1 })
 
-        const totals = products_1.length;//Tong product
+        const totals = products_1.length;
 
-        //Phan trang
-        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const page = parseInt(req.query.page) || 1;
         const limit = 12;
         const skip = page * limit - limit;
-        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
-        const totalPage = Math.ceil(total / limit);//làm tròn lên
-        // console.log(page);
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();
+        const totalPage = Math.ceil(total / limit);
+        
 
         paginate(page, totalPage);
         const products = await ProductModel.find({
@@ -323,15 +309,14 @@ const sort = async (req, res) => {
             cat_id: id,
         }).sort({ price: -1 })
 
-        const totals = products_1.length;//Tong product
+        const totals = products_1.length;
 
-        //Phan trang
-        const page = parseInt(req.query.page) || 1;//query truy vấn trên link
+        const page = parseInt(req.query.page) || 1;
         const limit = 12;
         const skip = page * limit - limit;
-        const total = await ProductModel.find({ cat_id: id }).countDocuments();//đếm số cột
-        const totalPage = Math.ceil(total / limit);//làm tròn lên
-        // console.log(page);
+        const total = await ProductModel.find({ cat_id: id }).countDocuments();
+        const totalPage = Math.ceil(total / limit);
+        
 
         paginate(page, totalPage);
         const products = await ProductModel.find({

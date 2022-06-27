@@ -10,8 +10,8 @@ const comment = async (req, res) => {
     const limit = 5;
     skip = page * limit - limit;
 
-    const total = await CommentModel.find().countDocuments();//đếm sô document trong collection
-    const totalPages = Math.ceil(total / limit);//Tinh tong so trang
+    const total = await CommentModel.find().countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     paginate(page, totalPages);
 

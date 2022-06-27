@@ -82,7 +82,6 @@
                     </div>
                 </form>
                 <!-- Form code ends --> 
-
                 <div id="toolbar" class="btn-group">
                     <div class="col-lg-12">
                         <%if(totalProductComplete>0){%>
@@ -97,7 +96,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <table data-toolbar="#toolbar" data-toggle="table">
+                                <table data-toolbar="#toolbar" id="tab1" data-toggle="table">
                                     <thead>
                                         <tr>
                                             <th data-field="id" data-sortable="true">ID</th>
@@ -200,5 +199,4 @@
             <!--/.main-->
             <%-include('../layout/footer.ejs')%>
 </body>
-
 </html>

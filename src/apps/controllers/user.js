@@ -3,7 +3,6 @@ const paginate = require("../../common/paginate");
 const slug = require("slug");
 
 const indexU = async (req, res) => {
-
     const page = parseInt(req.query.page) || 1;
     const limit = 5;
     skip = page * limit - limit;
@@ -15,7 +14,6 @@ const indexU = async (req, res) => {
     const user = await UserModel.find()
         .skip(skip)
         .limit(limit);
-    // console.log(user);
 
     res.render("admin/user/index",
         {
@@ -78,23 +76,18 @@ const search = async (req,res) => {
     if (key_word) {
         filter.$text = { $search: key_word }
     }
-    console.log(filter)
     
-    //total
     const page = parseInt(req.query.page) || 1;
     const limit = 5;
     skip = page * limit - limit;
 
     const total = await UserModel.find(filter,{score:{$meta:"textScore"}}).countDocuments();
     const totalPages = Math.ceil(total / limit);
-    console.log(total);
 
     paginate(page, totalPages);
     const user = await UserModel.find(filter,{score:{$meta:"textScore"}})
         .skip(skip)
         .limit(limit);
-    // console.log(user);
-    console.log(user)
 
     res.render("admin/user/index",
         {

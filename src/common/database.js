@@ -7,11 +7,8 @@ module.exports = () => {
         useFindAndModify: false,
         useCreateIndex: true
     });
-    return mongoose;//khai báo để lấy đối tượng mongoose
-    //Bới vì chỉ export mỗi kết nối nếu muốn dùng thì cần khai báo lại đối tượng mongoose nên return để k cần khai báo (require) lại
+    return mongoose;
 }
-
-
 
 // module.exports = () => {
 //     mongoose.connect('mongodb+srv://khoa_luan:HuhIl1Jmhrki53J6@cluster0.r6lgc.mongodb.net/?retryWrites=true&w=majority',

@@ -16,12 +16,9 @@ const commentSchema = mongoose.Schema({
     full_name:{
         type:String,
         required:true
-    }
-    // createdAt:Date,
-    // updatedAt:Date,
+    }  
 },{
     timestamps:true,
-    //tham số thứ 2 tạo schema tự động tạo 2 trường createdAt và updateAt
 })
 
 const CommentModel = mongoose.model("Comments",commentSchema,"comments");
